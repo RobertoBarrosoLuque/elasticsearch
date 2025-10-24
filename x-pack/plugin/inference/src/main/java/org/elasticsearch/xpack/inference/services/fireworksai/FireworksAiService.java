@@ -28,7 +28,6 @@ import org.elasticsearch.inference.ModelSecrets;
 import org.elasticsearch.inference.RerankingInferenceService;
 import org.elasticsearch.inference.SettingsConfiguration;
 import org.elasticsearch.inference.TaskType;
-import org.elasticsearch.inference.TextEmbeddingInferenceService;
 import org.elasticsearch.inference.configuration.SettingsConfigurationFieldType;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.xpack.core.inference.chunking.ChunkingSettingsBuilder;
@@ -64,7 +63,7 @@ import static org.elasticsearch.xpack.inference.services.ServiceUtils.throwIfNot
  * FireworksAI inference service for embeddings and reranking tasks.
  * This service uses the FireworksAI REST API to perform text embeddings and document reranking.
  */
-public class FireworksAiService extends SenderService implements TextEmbeddingInferenceService, RerankingInferenceService {
+public class FireworksAiService extends SenderService implements RerankingInferenceService {
     public static final String NAME = "fireworksai";
     private static final String SERVICE_NAME = "FireworksAI";
 
