@@ -130,4 +130,9 @@ public class FireworksAiEmbeddingsTaskSettings implements TaskSettings {
     public String toString() {
         return Strings.toString(this);
     }
+
+    @Override
+    public TaskSettings updatedTaskSettings(Map<String, Object> newSettings) {
+        return fromMap(newSettings);
+    }
 }
