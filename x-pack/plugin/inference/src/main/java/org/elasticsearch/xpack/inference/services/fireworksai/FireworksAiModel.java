@@ -20,7 +20,6 @@ import org.elasticsearch.xpack.inference.services.fireworksai.action.FireworksAi
 import org.elasticsearch.xpack.inference.services.settings.ApiKeySecrets;
 import org.elasticsearch.xpack.inference.services.settings.RateLimitSettings;
 
-import java.net.URI;
 import java.util.Map;
 import java.util.Objects;
 
@@ -76,9 +75,5 @@ public abstract class FireworksAiModel extends RateLimitGroupingModel {
 
     public int rateLimitGroupingHash() {
         return apiKey().hashCode();
-    }
-
-    public URI baseUri() {
-        return rateLimitServiceSettings.uri();
     }
 }

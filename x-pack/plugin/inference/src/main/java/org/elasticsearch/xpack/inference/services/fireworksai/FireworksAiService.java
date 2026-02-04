@@ -7,7 +7,6 @@
 
 package org.elasticsearch.xpack.inference.services.fireworksai;
 
-import org.elasticsearch.ElasticsearchStatusException;
 import org.elasticsearch.TransportVersion;
 import org.elasticsearch.action.ActionListener;
 import org.elasticsearch.cluster.service.ClusterService;
@@ -29,7 +28,6 @@ import org.elasticsearch.inference.SettingsConfiguration;
 import org.elasticsearch.inference.SimilarityMeasure;
 import org.elasticsearch.inference.TaskType;
 import org.elasticsearch.inference.configuration.SettingsConfigurationFieldType;
-import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.xpack.core.inference.chunking.ChunkingSettingsBuilder;
 import org.elasticsearch.xpack.core.inference.chunking.EmbeddingRequestChunker;
 import org.elasticsearch.xpack.inference.external.http.sender.EmbeddingsInput;
@@ -262,9 +260,7 @@ public class FireworksAiService extends SenderService {
         TimeValue timeout,
         ActionListener<InferenceServiceResults> listener
     ) {
-        listener.onFailure(
-            new ElasticsearchStatusException("Unified completion is not supported for FireworksAI service", RestStatus.BAD_REQUEST)
-        );
+        ServiceUtils.throwUnsupportedUnifiedCompletionOperation(NAME);
     }
 
     @Override
