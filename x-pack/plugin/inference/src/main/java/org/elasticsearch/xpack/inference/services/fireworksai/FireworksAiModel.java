@@ -73,6 +73,8 @@ public abstract class FireworksAiModel extends RateLimitGroupingModel {
         return rateLimitServiceSettings.rateLimitSettings();
     }
 
+    // FireworksAI rate limits are per API key only, not per model or URL
+    // See: https://docs.fireworks.ai/guides/quotas_usage/rate-limits
     public int rateLimitGroupingHash() {
         return apiKey().hashCode();
     }

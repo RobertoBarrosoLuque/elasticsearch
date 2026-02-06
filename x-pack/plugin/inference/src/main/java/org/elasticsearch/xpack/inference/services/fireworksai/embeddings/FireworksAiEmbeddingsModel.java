@@ -9,6 +9,7 @@ package org.elasticsearch.xpack.inference.services.fireworksai.embeddings;
 
 import org.elasticsearch.core.Nullable;
 import org.elasticsearch.inference.ChunkingSettings;
+import org.elasticsearch.inference.EmptyTaskSettings;
 import org.elasticsearch.inference.ModelConfigurations;
 import org.elasticsearch.inference.ModelSecrets;
 import org.elasticsearch.inference.TaskType;
@@ -27,12 +28,7 @@ import java.util.Map;
 public class FireworksAiEmbeddingsModel extends FireworksAiModel {
 
     public static FireworksAiEmbeddingsModel of(FireworksAiEmbeddingsModel model, Map<String, Object> taskSettings) {
-        if (taskSettings == null || taskSettings.isEmpty()) {
-            return model;
-        }
-
-        var requestTaskSettings = FireworksAiEmbeddingsTaskSettings.fromMap(taskSettings);
-        return new FireworksAiEmbeddingsModel(model, FireworksAiEmbeddingsTaskSettings.of(model.getTaskSettings(), requestTaskSettings));
+        return model;
     }
 
     public FireworksAiEmbeddingsModel(
@@ -48,7 +44,6 @@ public class FireworksAiEmbeddingsModel extends FireworksAiModel {
             inferenceEntityId,
             service,
             FireworksAiEmbeddingsServiceSettings.fromMap(serviceSettings, context),
-            FireworksAiEmbeddingsTaskSettings.fromMap(taskSettings),
             chunkingSettings,
             DefaultSecretSettings.fromMap(secrets)
         );
@@ -59,20 +54,22 @@ public class FireworksAiEmbeddingsModel extends FireworksAiModel {
         String inferenceEntityId,
         String service,
         FireworksAiEmbeddingsServiceSettings serviceSettings,
-        FireworksAiEmbeddingsTaskSettings taskSettings,
         ChunkingSettings chunkingSettings,
         @Nullable DefaultSecretSettings secrets
     ) {
         super(
-            new ModelConfigurations(inferenceEntityId, TaskType.TEXT_EMBEDDING, service, serviceSettings, taskSettings, chunkingSettings),
+            new ModelConfigurations(
+                inferenceEntityId,
+                TaskType.TEXT_EMBEDDING,
+                service,
+                serviceSettings,
+                EmptyTaskSettings.INSTANCE,
+                chunkingSettings
+            ),
             new ModelSecrets(secrets),
             secrets,
             serviceSettings
         );
-    }
-
-    private FireworksAiEmbeddingsModel(FireworksAiEmbeddingsModel originalModel, FireworksAiEmbeddingsTaskSettings taskSettings) {
-        super(originalModel, taskSettings);
     }
 
     public FireworksAiEmbeddingsModel(FireworksAiEmbeddingsModel originalModel, FireworksAiEmbeddingsServiceSettings serviceSettings) {
@@ -82,11 +79,6 @@ public class FireworksAiEmbeddingsModel extends FireworksAiModel {
     @Override
     public FireworksAiEmbeddingsServiceSettings getServiceSettings() {
         return (FireworksAiEmbeddingsServiceSettings) super.getServiceSettings();
-    }
-
-    @Override
-    public FireworksAiEmbeddingsTaskSettings getTaskSettings() {
-        return (FireworksAiEmbeddingsTaskSettings) super.getTaskSettings();
     }
 
     @Override
