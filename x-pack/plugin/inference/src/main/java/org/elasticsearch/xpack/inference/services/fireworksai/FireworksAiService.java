@@ -67,7 +67,6 @@ public class FireworksAiService extends SenderService {
 
     public static final TransportVersion FIREWORKS_AI_SERVICE = TransportVersion.fromName("fireworks_ai_service");
 
-    // Supported embedding models: https://docs.fireworks.ai/guides/querying-embeddings-models
     private static final EnumSet<TaskType> SUPPORTED_TASK_TYPES = EnumSet.of(TaskType.TEXT_EMBEDDING);
 
     // FireworksAI embeddings max batch size - enforced by the embeddings server

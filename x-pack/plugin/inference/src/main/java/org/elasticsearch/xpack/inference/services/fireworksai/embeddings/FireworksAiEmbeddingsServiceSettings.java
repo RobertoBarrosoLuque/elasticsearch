@@ -87,10 +87,10 @@ public class FireworksAiEmbeddingsServiceSettings extends FilteredXContentObject
             : ServiceUtils.createUri(DEFAULT_URL);
 
         // Handle dimensionsSetByUser based on context
-        boolean dimensionsSetByUser = switch (context) {
+        Boolean dimensionsSetByUser = switch (context) {
             case PERSISTENT -> {
                 Boolean value = extractOptionalBoolean(map, DIMENSIONS_SET_BY_USER, validationException);
-                yield value != null ? value : false;
+                yield value != null ? value : Boolean.FALSE;
             }
             case REQUEST -> dims != null;
         };
@@ -115,7 +115,7 @@ public class FireworksAiEmbeddingsServiceSettings extends FilteredXContentObject
     private final SimilarityMeasure similarity;
     private final Integer dimensions;
     private final Integer maxInputTokens;
-    private final boolean dimensionsSetByUser;
+    private final Boolean dimensionsSetByUser;
     private final RateLimitSettings rateLimitSettings;
 
     public FireworksAiEmbeddingsServiceSettings(
@@ -124,7 +124,7 @@ public class FireworksAiEmbeddingsServiceSettings extends FilteredXContentObject
         @Nullable SimilarityMeasure similarity,
         @Nullable Integer dimensions,
         @Nullable Integer maxInputTokens,
-        boolean dimensionsSetByUser,
+        Boolean dimensionsSetByUser,
         @Nullable RateLimitSettings rateLimitSettings
     ) {
         this.modelId = Objects.requireNonNull(modelId);
@@ -132,7 +132,7 @@ public class FireworksAiEmbeddingsServiceSettings extends FilteredXContentObject
         this.similarity = similarity;
         this.dimensions = dimensions;
         this.maxInputTokens = maxInputTokens;
-        this.dimensionsSetByUser = dimensionsSetByUser;
+        this.dimensionsSetByUser = Objects.requireNonNull(dimensionsSetByUser);
         this.rateLimitSettings = Objects.requireNonNullElse(rateLimitSettings, DEFAULT_RATE_LIMIT_SETTINGS);
     }
 
@@ -167,7 +167,7 @@ public class FireworksAiEmbeddingsServiceSettings extends FilteredXContentObject
         return maxInputTokens;
     }
 
-    public boolean dimensionsSetByUser() {
+    public Boolean dimensionsSetByUser() {
         return dimensionsSetByUser;
     }
 
@@ -192,7 +192,10 @@ public class FireworksAiEmbeddingsServiceSettings extends FilteredXContentObject
 
         toXContentFragmentOfExposedFields(builder, params);
 
-        builder.field(DIMENSIONS_SET_BY_USER, dimensionsSetByUser);
+        // dimensionsSetByUser is an internal field, not exposed to users
+        if (dimensionsSetByUser != null) {
+            builder.field(DIMENSIONS_SET_BY_USER, dimensionsSetByUser);
+        }
 
         builder.endObject();
         return builder;
@@ -241,7 +244,7 @@ public class FireworksAiEmbeddingsServiceSettings extends FilteredXContentObject
             && Objects.equals(similarity, that.similarity)
             && Objects.equals(dimensions, that.dimensions)
             && Objects.equals(maxInputTokens, that.maxInputTokens)
-            && dimensionsSetByUser == that.dimensionsSetByUser
+            && Objects.equals(dimensionsSetByUser, that.dimensionsSetByUser)
             && Objects.equals(rateLimitSettings, that.rateLimitSettings);
     }
 
